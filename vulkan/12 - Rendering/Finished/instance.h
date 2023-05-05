@@ -158,6 +158,10 @@ namespace vkInit {
 		glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
 		std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+#ifdef __APPLE__
+		extensions.push_back(VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+		extensions.push_back("VK_KHR_get_physical_device_properties2");
+#endif //__APPLE__
 
 		//In order to hook in a custom validation callback
 		if (debug) {
@@ -198,7 +202,10 @@ namespace vkInit {
 			static_cast<uint32_t>(layers.size()), layers.data(), // enabled layers
 			static_cast<uint32_t>(extensions.size()), extensions.data() // enabled extensions
 		);
-
+		
+#ifdef __APPLE__
+		createInfo.flags |= vk::InstanceCreateFlagBits::eEnumeratePortabilityKHR;
+#endif //__APPLE__
 
 		try {
 			/*

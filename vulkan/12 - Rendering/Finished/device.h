@@ -217,6 +217,12 @@ namespace vkInit {
 		if (debug) {
 			enabledLayers.push_back("VK_LAYER_KHRONOS_validation");
 		}
+
+#if __APPLE__
+			// TODO: In general: if VK_KHR_portability_subset is available, use it!
+		deviceExtensions.push_back("VK_KHR_portability_subset");
+#endif
+		
 		vk::DeviceCreateInfo deviceInfo = vk::DeviceCreateInfo(
 			vk::DeviceCreateFlags(), 
 			queueCreateInfo.size(), queueCreateInfo.data(),
